@@ -1,5 +1,5 @@
 package coinbase
 
-type AccountBase struct {
+type PayMethod struct {
 	Model
 }
