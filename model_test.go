@@ -1,8 +1,21 @@
 package coinbase
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/chrhlnd/dynjson"
+)
+
+var propsJson = `
+{
+	"id" : "123"
+}
+`
 
 func TestAccount(t *testing.T) {
-	//			t.Errorf("Reverse(%q) == %q, want %q", c.in, got, c.want)
-	//t.Errorf("whoops")
+	props := dynjson.NewFromBytes([]byte(propsJson))
+	acct1 := Account{AccountBase{Base{props}}}
+	if "123" != acct1.id() {
+		t.Errorf("whoops.  bad id.")
+	}
 }
