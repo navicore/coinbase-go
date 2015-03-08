@@ -6,8 +6,12 @@ type Account struct {
 	AccountBase
 }
 
-func NewAccount(id string) Account {
+func NewAccountFromId(id string) Account {
 	props := Id(id)
+	return Account{AccountBase{Model{Base{}, props}}}
+}
+
+func NewAccount(props dynjson.DynNode) Account {
 	return Account{AccountBase{Model{Base{}, props}}}
 }
 
@@ -35,7 +39,7 @@ func (obj Account) Addresses() (dynjson.DynNode, error) {
 	return nil, nil
 }
 
-func (obj Account) CreateAddress(args dynjson.DynNode) (dynjson.DynNode, error) {
+func (obj Account) NewAddress(args dynjson.DynNode) (dynjson.DynNode, error) {
 	return nil, nil
 }
 

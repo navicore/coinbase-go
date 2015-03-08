@@ -19,8 +19,15 @@ func TestAccount(t *testing.T) {
 		t.Errorf("whoops.  bad id.")
 	}
 }
-func TestAccountWithId(t *testing.T) {
-	acct1 := NewAccount("4321")
+func TestAccountFromJson(t *testing.T) {
+	props := dynjson.NewFromBytes([]byte(propsJson))
+	acct1 := NewAccount(props)
+	if "123" != acct1.id() {
+		t.Errorf("whoops.  bad id.")
+	}
+}
+func TestAccountFromId(t *testing.T) {
+	acct1 := NewAccountFromId("4321")
 	if "4321" != acct1.id() {
 		t.Errorf("whoops.  bad id.")
 	}
