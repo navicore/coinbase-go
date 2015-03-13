@@ -6,17 +6,17 @@ type Account struct {
 	Model
 }
 
-func NewAccountFromId(id string) Account {
+func NewAccountFromId(id string, client Client) Account {
 	props := Id(id)
-	return Account{Model{Base{}, props}}
+	return Account{Model{Base{}, client, props}}
 }
 
-func NewAccountFromProps(props dynjson.DynNode) Account {
-	return Account{Model{Base{}, props}}
+func NewAccountFromProps(props dynjson.DynNode, client Client) Account {
+	return Account{Model{Base{}, client, props}}
 }
 
-func NewAccount(props dynjson.DynNode) Account {
-	return Account{Model{Base{}, props}}
+func NewAccount(props dynjson.DynNode, client Client) Account {
+	return Account{Model{Base{}, client, props}}
 }
 
 func (obj Account) Delete() (bool, error) {

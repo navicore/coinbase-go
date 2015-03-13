@@ -8,7 +8,8 @@ import (
 
 type Model struct {
 	Base
-	props dynjson.DynNode
+	client Client
+	props  dynjson.DynNode
 }
 
 func (obj Model) id() string {

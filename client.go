@@ -126,7 +126,7 @@ func (this Client) Accounts() ([]Account, error) {
 		if err != nil {
 			return nil, err
 		}
-		accts[i] = NewAccountFromProps(acctdyn)
+		accts[i] = NewAccountFromProps(acctdyn, this)
 	}
 	return accts, nil
 }
