@@ -25,3 +25,10 @@ func Id(id string) dynjson.DynNode {
 	props := dynjson.NewFromBytes(b)
 	return props
 }
+
+func (this Model) String() string {
+	if this.props == nil {
+		return "nil"
+	}
+	return string(this.props.Data())
+}

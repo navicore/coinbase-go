@@ -14,7 +14,7 @@ var propsJson = `
 
 func TestAccount(t *testing.T) {
 	props := dynjson.NewFromBytes([]byte(propsJson))
-	acct1 := Account{AccountBase{Model{Base{}, props}}}
+	acct1 := Account{Model{Base{}, props}}
 	if "123" != acct1.id() {
 		t.Errorf("whoops.  bad id.")
 	}

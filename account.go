@@ -3,16 +3,20 @@ package coinbase
 import "github.com/chrhlnd/dynjson"
 
 type Account struct {
-	AccountBase
+	Model
 }
 
 func NewAccountFromId(id string) Account {
 	props := Id(id)
-	return Account{AccountBase{Model{Base{}, props}}}
+	return Account{Model{Base{}, props}}
+}
+
+func NewAccountFromProps(props dynjson.DynNode) Account {
+	return Account{Model{Base{}, props}}
 }
 
 func NewAccount(props dynjson.DynNode) Account {
-	return Account{AccountBase{Model{Base{}, props}}}
+	return Account{Model{Base{}, props}}
 }
 
 func (obj Account) Delete() (bool, error) {
