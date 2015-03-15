@@ -1,6 +1,7 @@
 package coinbase
 
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -58,6 +59,23 @@ func (this *Client) getHMAC(msg string) string {
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
+func (this *Client) Post(api_method string, body string) ([]byte, error) {
+	api_url := this.Uri + api_method
+
+	var req *http.Request
+	var err error
+
+	req, err = http.NewRequest("POST", api_url, bytes.NewReader([]byte(body)))
+	if err != nil {
+		return nil, err
+	}
+
+	this.headers(api_url, req)
+	this.authHeaders(api_url, req)
+
+	return this.request(req)
+}
+
 func (this *Client) Get(method string, params url.Values) ([]byte, error) {
 
 	api_url := this.Uri + method
@@ -73,8 +91,6 @@ func (this *Client) Get(method string, params url.Values) ([]byte, error) {
 
 	this.headers(api_url, req)
 	this.authHeaders(api_url, req)
-
-	req.Header.Add("Accept", "application/json")
 
 	return this.request(req)
 }
@@ -97,6 +113,16 @@ func (this *Client) request(req *http.Request) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func (this Client) PostDynNode(api_method string, params string) (dynjson.DynNode, error) {
+	buffer, err := this.Post(api_method, params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return dynjson.NewFromBytes(buffer), nil
 }
 
 func (this Client) GetDynNode(api_method string, params url.Values) (dynjson.DynNode, error) {
@@ -144,8 +170,19 @@ func (this Client) Account(id string) (Account, error) {
 	return NewAccountFromProps(acctdyn, this), nil
 }
 
-func (this Client) CreateAccount(args dynjson.DynNode) (Account, error) {
-	return Account{}, nil
+//func (this Client) CreateAccount(args dynjson.DynNode) (Account, error) {
+func (this Client) CreateAccount(args string) (Account, error) {
+	//path := fmt.Sprintf("/accounts/%v", id)
+	root, err := this.PostDynNode("/accounts", args)
+	if err != nil {
+		return Account{}, err
+	}
+	acctdyn, err := root.Node("/account")
+	if err != nil {
+		return Account{}, err
+	}
+	return NewAccountFromProps(acctdyn, this), nil
+
 }
 
 func (this Client) Contacts() ([]Contact, error) {
