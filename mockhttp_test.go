@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func Expect(t *testing.T, a interface{}, b interface{}) {
+func expect(t *testing.T, a interface{}, b interface{}) {
 	if a != b {
 		t.Errorf("Expected %v (type %v) - Got %v (type %v)", b, reflect.TypeOf(b), a, reflect.TypeOf(a))
 	}
@@ -43,7 +43,7 @@ func route(r *http.Request) (int, string) {
 	return 404, "bad path or method"
 }
 
-func MockClient() Client {
+func mockClient() Client {
 
 	mux := http.NewServeMux()
 

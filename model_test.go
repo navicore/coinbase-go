@@ -18,11 +18,11 @@ func TestAccountApi(t *testing.T) {
 
 	initrouter()
 
-	c := MockClient()
+	c := mockClient()
 	accts, err := c.Accounts()
-	Expect(t, err, nil)
-	Expect(t, len(accts), 3)
+	expect(t, err, nil)
+	expect(t, len(accts), 3)
 	b := accts[1].props.AsNode("/balance/amount").AsStr()
 	fb, _ := strconv.ParseFloat(b, 64)
-	Expect(t, fb, 508.94)
+	expect(t, fb, 508.94)
 }
