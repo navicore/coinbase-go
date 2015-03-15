@@ -1,0 +1,52 @@
+{
+    "accounts": [
+        {
+            "id": "12345600000000000000000a",
+            "name": "BTC Account Primo!",
+            "active": true,
+            "created_at": "2015-01-28T11:53:53-08:00",
+            "balance": {
+                "amount": "0.00432025",
+                "currency": "BTC"
+            },
+            "native_balance": {
+                "amount": "1.24",
+                "currency": "USD"
+            },
+            "primary": false,
+            "type": "wallet"
+        },
+        {
+            "id": "12345600000000000000000b",
+            "name": "USD Wallet",
+            "active": true,
+            "created_at": "2015-01-30T08:52:25-08:00",
+            "balance": {
+                "amount": "508.94",
+                "currency": "USD"
+            },
+            "native_balance": {
+                "amount": "508.94",
+                "currency": "USD"
+            },
+            "primary": true,
+            "type": "fiat"
+        },
+        {
+            "id": "12345600000000000000000c",
+            "name": "Other BTC Wallet",
+            "active": true,
+            "created_at": "2015-02-12T11:51:37-08:00",
+            "balance": {
+                "amount": "0.04200000",
+                "currency": "BTC"
+            },
+            "native_balance": {
+                "amount": "12.05",
+                "currency": "USD"
+            },
+            "primary": false,
+            "type": "wallet"
+        }
+    ]
+}
