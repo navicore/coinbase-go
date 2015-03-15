@@ -1,0 +1,37 @@
+{
+    "user": {
+        "balance": {
+            "amount": "49.76000000",
+            "currency": "BTC"
+        },
+        "buy_level": 1,
+        "buy_limit": {
+            "amount": "1000",
+            "currency": "USD"
+        },
+        "email": "user1@example.com",
+        "id": "512db383f8182bd24d000001",
+        "instant_buy_level": 1,
+        "instant_buy_limit": {
+            "amount": "1000",
+            "currency": "USD"
+        },
+        "merchant": {
+            "company_name": "Company Name, Inc.",
+            "enabled": true,
+            "logo": {
+                "medium": "http://mediumlogo.example",
+                "small": "http://smalllogo.example",
+                "url": "http://logo.example"
+            }
+        },
+        "name": "User One",
+        "native_currency": "USD",
+        "sell_level": 1,
+        "sell_limit": {
+            "amount": "1000",
+            "currency": "USD"
+        },
+        "time_zone": "Pacific Time (US & Canada)"
+    }
+}

@@ -170,9 +170,7 @@ func (this Client) Account(id string) (Account, error) {
 	return NewAccountFromProps(acctdyn, this), nil
 }
 
-//func (this Client) CreateAccount(args dynjson.DynNode) (Account, error) {
 func (this Client) CreateAccount(args string) (Account, error) {
-	//path := fmt.Sprintf("/accounts/%v", id)
 	root, err := this.PostDynNode("/accounts", args)
 	if err != nil {
 		return Account{}, err
@@ -182,15 +180,42 @@ func (this Client) CreateAccount(args string) (Account, error) {
 		return Account{}, err
 	}
 	return NewAccountFromProps(acctdyn, this), nil
-
 }
 
-func (this Client) Contacts() ([]Contact, error) {
-	return nil, nil
+func (this Client) Contacts(page int, limit int, query string) ([]Contact, error) {
+	//TODO: page limit query impl
+	root, err := this.GetDynNode("/contacts", nil)
+	if err != nil {
+		return nil, err
+	}
+	dyn, err := root.Node("/contacts")
+	if err != nil {
+		return nil, err
+	}
+	len := dyn.Len()
+
+	contacts := make([]Contact, len, len)
+	for i := 0; i < len; i++ {
+		node, err := dyn.Node(fmt.Sprintf("/%v", i))
+		if err != nil {
+			return nil, err
+		}
+		props, err := node.Node("/contact")
+		contacts[i] = Contact{Model{props: props, client: this}}
+	}
+	return contacts, nil
 }
 
 func (this Client) CurrentUser() (User, error) {
-	return User{}, nil
+	root, err := this.PostDynNode("/users/self", "")
+	if err != nil {
+		return User{}, err
+	}
+	props, err := root.Node("/user")
+	if err != nil {
+		return User{}, err
+	}
+	return User{Model{props: props, client: this}}, nil
 }
 
 func (this Client) BuyPrice() (dynjson.DynNode, error) {
