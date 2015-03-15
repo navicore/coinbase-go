@@ -9,37 +9,14 @@ import (
 	"reflect"
 	"strconv"
 	"testing"
-
-	"github.com/chrhlnd/dynjson"
 )
 
-var propsJson = `
-{
-	"id" : "123"
+func testok(*http.Request) (int, string) {
+	return 200, "OK"
 }
-`
-
-func TestAccount(t *testing.T) {
-	props := dynjson.NewFromBytes([]byte(propsJson))
-	acct1 := Account{Model{Base{}, Client{}, props}}
-	if "123" != acct1.id() {
-		t.Errorf("whoops.  bad id.")
-	}
-}
-
-func TestAccountFromJson(t *testing.T) {
-	props := dynjson.NewFromBytes([]byte(propsJson))
-	acct1 := NewAccount(props, Client{})
-	if "123" != acct1.id() {
-		t.Errorf("whoops.  bad id.")
-	}
-}
-
-func TestAccountFromId(t *testing.T) {
-	acct1 := NewAccountFromId("4321", Client{})
-	if "4321" != acct1.id() {
-		t.Errorf("whoops.  bad id.")
-	}
+func initrouter() {
+	handlers = append(handlers, hdlr{"/accounts", "GET", "test_accounts.json", testok})
+	handlers = append(handlers, hdlr{"/account", "GET", "test_accounts.json", func(*http.Request) (int, string) { return 200, "OK" }})
 }
 
 func expect(t *testing.T, a interface{}, b interface{}) {
@@ -48,17 +25,45 @@ func expect(t *testing.T, a interface{}, b interface{}) {
 	}
 }
 
+type hdlr struct {
+	Path     string
+	Method   string
+	Filename string
+	Test     func(*http.Request) (int, string)
+}
+
+var handlers = make([]hdlr, 0, 50)
+
+func route(r *http.Request) (int, string) {
+	method := r.Method
+	path := r.URL.Path
+	for i := range handlers {
+		if path == handlers[i].Path {
+			if method == handlers[i].Method {
+				code, msg := handlers[i].Test(r)
+				if code != 200 {
+					return code, msg
+				}
+				json, _ := ioutil.ReadFile(handlers[i].Filename)
+				return 200, string(json)
+			}
+		}
+	}
+	return 404, "bad path or method"
+}
 func client(t *testing.T) Client {
+
+	initrouter()
 
 	mux := http.NewServeMux()
 
-	acctshandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(200)
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		code, json := route(r)
+		w.WriteHeader(code)
 		w.Header().Set("Content-Type", "application/json")
-		acctsjson, _ := ioutil.ReadFile("./test_accounts.json")
-		fmt.Fprintln(w, string(acctsjson))
+		fmt.Fprintln(w, json)
 	})
-	mux.Handle("/accounts", acctshandler)
+	mux.Handle("/", handler)
 
 	server := httptest.NewServer(mux)
 	transport := &http.Transport{
