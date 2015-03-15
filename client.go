@@ -132,7 +132,16 @@ func (this Client) Accounts() ([]Account, error) {
 }
 
 func (this Client) Account(id string) (Account, error) {
-	return Account{}, nil
+	path := fmt.Sprintf("/accounts/%v", id)
+	root, err := this.GetDynNode(path, nil)
+	if err != nil {
+		return Account{}, err
+	}
+	acctdyn, err := root.Node("/account")
+	if err != nil {
+		return Account{}, err
+	}
+	return NewAccountFromProps(acctdyn, this), nil
 }
 
 func (this Client) CreateAccount(args dynjson.DynNode) (Account, error) {
