@@ -33,9 +33,9 @@ func (this Client) Refresh() (bool, error) {
 	return false, nil
 }
 
-func (this *Client) authHeaders(url string, req *http.Request) {
+func (this *Client) authHeaders(url string, bodystr string, req *http.Request) {
 	nonce := strconv.FormatInt(time.Now().UnixNano(), 10)
-	msg := nonce + url
+	msg := nonce + url + bodystr
 	sign := this.getHMAC(msg)
 
 	req.Header.Add("ACCESS_KEY", this.Key)
@@ -59,19 +59,19 @@ func (this *Client) getHMAC(msg string) string {
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
-func (this *Client) Post(api_method string, body string) ([]byte, error) {
+func (this *Client) Post(api_method string, bodystr string) ([]byte, error) {
 	api_url := this.Uri + api_method
 
 	var req *http.Request
 	var err error
 
-	req, err = http.NewRequest("POST", api_url, bytes.NewReader([]byte(body)))
+	req, err = http.NewRequest("POST", api_url, bytes.NewReader([]byte(bodystr)))
 	if err != nil {
 		return nil, err
 	}
 
 	this.headers(api_url, req)
-	this.authHeaders(api_url, req)
+	this.authHeaders(api_url, bodystr, req)
 
 	return this.request(req)
 }
@@ -90,7 +90,7 @@ func (this *Client) Get(method string, params url.Values) ([]byte, error) {
 	}
 
 	this.headers(api_url, req)
-	this.authHeaders(api_url, req)
+	this.authHeaders(api_url, "", req)
 
 	return this.request(req)
 }
