@@ -11,8 +11,11 @@ func testok(*http.Request) (int, string) {
 }
 
 func init() {
-	handlers = append(handlers, hdlr{"/accounts", "GET", "accounts_test.json", testok})
-	handlers = append(handlers, hdlr{"/account", "GET", "account_test.json", func(*http.Request) (int, string) { return 200, "OK" }})
+	handlers =
+		[]hdlr{
+			hdlr{"/accounts", "GET", "accounts_test.json", testok},
+			hdlr{"/account", "GET", "account_test.json", testok},
+		}
 }
 
 func TestAccountApi(t *testing.T) {
