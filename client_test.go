@@ -34,7 +34,7 @@ func init() {
 			mock{"/users/self", "POST", "current_user_test.json", testok},
 			mock{"/prices/buy", "GET", "buy_price_test.json", testok},
 			mock{"/prices/sell", "GET", "sell_price_test.json", testok},
-			mock{"/prices/spot_rate?currency=USD", "GET", "spot_price_test.json", testok},
+			mock{"/prices/spot_rate", "GET", "spot_price_test.json", testok},
 		}
 }
 
@@ -98,7 +98,9 @@ func TestSellPrice(t *testing.T) {
 }
 
 func TestSpotPrice(t *testing.T) {
-	//TODO
+	price, err := mclient.SpotPrice("USD")
+	expect(t, err, nil)
+	expect(t, price.AsNode("/amount").AsStr(), "10.00")
 }
 
 func TestCurrencies(t *testing.T) {

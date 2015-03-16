@@ -231,8 +231,9 @@ func (this Client) SellPrice(qty int) (dynjson.DynNode, error) {
 	return this.GetDynNode(path, nil)
 }
 
-func (this Client) SpotPrice() (dynjson.DynNode, error) {
-	return nil, nil
+func (this Client) SpotPrice(currency string) (dynjson.DynNode, error) {
+	path := fmt.Sprintf("/prices/spot_rate?currency=%v", currency)
+	return this.GetDynNode(path, nil)
 }
 
 func (this Client) Currencies() (dynjson.DynNode, error) {
