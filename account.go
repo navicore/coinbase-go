@@ -24,7 +24,24 @@ func NewAccount(props dynjson.DynNode, client Client) Account {
 }
 
 func (this Account) Delete() (bool, error) {
-	return false, nil
+	id, err := this.Str("/id")
+	if err != nil {
+		return false, err
+	}
+	path := fmt.Sprintf("/accounts/%v", id)
+	dyn, err := this.client.DelDynNode(path, "")
+	if err != nil {
+		return false, err
+	}
+	props, err := dyn.Node("/success")
+	if err != nil {
+		return false, err
+	}
+	if props.IsNull() {
+		return false, fmt.Errorf("node not found")
+	}
+	return props.AsBool(), nil
+
 }
 
 func (this Account) SetPrimary() (bool, error) {

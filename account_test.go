@@ -48,6 +48,9 @@ func TestSetPrimary(t *testing.T) {
 }
 
 func TestDeleteAccount(t *testing.T) {
+	success, err := MockAcct.Delete()
+	expect(t, err, nil)
+	expect(t, success, true)
 }
 
 func TestModifyAccount(t *testing.T) {

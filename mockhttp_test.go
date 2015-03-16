@@ -26,6 +26,7 @@ var handlers = []mock{
 	mock{"/payment_methods", "GET", "paymethods_test.json", testok},
 	mock{"/payment_methods/530eb5b217cb34e07a000011", "GET", "paymethod_test.json", testok},
 	mock{"/accounts/536a541fa9393bb3c7000023/primary", "POST", "success_test.json", testok},
+	mock{"/accounts/536a541fa9393bb3c7000023", "DELETE", "success_test.json", testok},
 }
 var MockClient = mockClient()
 var MockAcct, _ = MockClient.Account("536a541fa9393bb3c7000023")

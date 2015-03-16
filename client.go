@@ -59,6 +59,23 @@ func (this *Client) getHMAC(msg string) string {
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
+func (this *Client) Delete(api_method string) ([]byte, error) {
+	api_url := this.Uri + api_method
+
+	var req *http.Request
+	var err error
+
+	req, err = http.NewRequest("DELETE", api_url, bytes.NewReader([]byte("")))
+	if err != nil {
+		return nil, err
+	}
+
+	this.headers(api_url, req)
+	this.authHeaders(api_url, "", req)
+
+	return this.request(req)
+}
+
 func (this *Client) Post(api_method string, bodystr string) ([]byte, error) {
 	api_url := this.Uri + api_method
 
@@ -113,6 +130,16 @@ func (this *Client) request(req *http.Request) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func (this Client) DelDynNode(api_method string, params string) (dynjson.DynNode, error) {
+	buffer, err := this.Delete(api_method)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return dynjson.NewFromBytes(buffer), nil
 }
 
 func (this Client) PostDynNode(api_method string, params string) (dynjson.DynNode, error) {
