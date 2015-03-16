@@ -36,7 +36,70 @@ func TestAccountFromId(t *testing.T) {
 }
 
 func TestBalance(t *testing.T) {
-	_, err := MockAcct.Balance()
+	bal, err := MockAcct.Balance()
 	expect(t, err, nil)
-	//expect(t, bal.AsNode("/amount").AsStr(), "50.00000000")
+	expect(t, bal.AsNode("/amount").AsStr(), "36.62800000")
+}
+
+func TestSetPrimary(t *testing.T) {
+	success, err := MockAcct.SetPrimary()
+	expect(t, err, nil)
+	expect(t, success, true)
+}
+
+func TestDeleteAccount(t *testing.T) {
+}
+
+func TestModifyAccount(t *testing.T) {
+}
+
+func TestGetAddresses(t *testing.T) {
+}
+
+func TestGetAddress(t *testing.T) {
+}
+
+func TestCreateAddress(t *testing.T) {
+}
+
+func TestGetTxns(t *testing.T) {
+}
+
+func TestGetTxn(t *testing.T) {
+}
+
+func TestTransferMoney(t *testing.T) {
+}
+
+func TestSendMoney(t *testing.T) {
+}
+
+func TestRequestMoney(t *testing.T) {
+}
+
+func TestGetXfers(t *testing.T) {
+}
+
+func TestGetXfer(t *testing.T) {
+}
+
+func TestGetButton(t *testing.T) {
+}
+
+func TestCreateButton(t *testing.T) {
+}
+
+func TestGetOrders(t *testing.T) {
+}
+
+func TestGetOrder(t *testing.T) {
+}
+
+func TestCreateOrder(t *testing.T) {
+}
+
+func TestBuy(t *testing.T) {
+}
+
+func TestSell(t *testing.T) {
 }

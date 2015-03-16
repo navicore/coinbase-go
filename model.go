@@ -29,6 +29,8 @@ func Id(id string) dynjson.DynNode {
 }
 
 func (this Model) AsFloat(path string) float64 {
+	//ejs TODO make safe path checks, NO PANICS!
+	//ejs TODO use error return
 	if this.props == nil {
 		return -1
 	}
@@ -42,6 +44,8 @@ func (this Model) AsFloat(path string) float64 {
 }
 
 func (this Model) AsInt(path string) int {
+	//ejs TODO make safe path checks, NO PANICS!
+	//ejs TODO use error return
 	if this.props == nil {
 		return -1
 	}
@@ -53,6 +57,8 @@ func (this Model) AsInt(path string) int {
 }
 
 func (this Model) AsStr(path string) string {
+	//ejs TODO make safe path checks, NO PANICS!
+	//ejs TODO use error return
 	if this.props == nil {
 		return ""
 	}
