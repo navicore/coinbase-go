@@ -2,6 +2,7 @@ package coinbase
 
 import (
 	"encoding/json"
+	"strconv"
 
 	"github.com/chrhlnd/dynjson"
 )
@@ -12,8 +13,8 @@ type Model struct {
 	props  dynjson.DynNode
 }
 
-func (obj Model) id() string {
-	id, _ := obj.props.Node("/id")
+func (this Model) id() string {
+	id, _ := this.props.Node("/id")
 	return id.AsStr()
 }
 
@@ -25,6 +26,41 @@ func Id(id string) dynjson.DynNode {
 	b, _ := json.Marshal(myid)
 	props := dynjson.NewFromBytes(b)
 	return props
+}
+
+func (this Model) AsFloat(path string) float64 {
+	if this.props == nil {
+		return -1
+	}
+	bn, err := this.props.Node(path)
+	if err != nil {
+		return -1
+	}
+	b := bn.AsStr()
+	fb, _ := strconv.ParseFloat(b, 64)
+	return fb
+}
+
+func (this Model) AsInt(path string) int {
+	if this.props == nil {
+		return -1
+	}
+	bn, err := this.props.Node(path)
+	if err != nil {
+		return -1
+	}
+	return int(bn.AsI64())
+}
+
+func (this Model) AsStr(path string) string {
+	if this.props == nil {
+		return ""
+	}
+	bn, err := this.props.Node(path)
+	if err != nil {
+		return ""
+	}
+	return bn.AsStr()
 }
 
 func (this Model) String() string {

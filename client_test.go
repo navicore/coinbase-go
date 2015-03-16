@@ -50,6 +50,7 @@ func TestClientAccounts(t *testing.T) {
 	b = accts[0].props.AsNode("/native_balance/amount").AsStr()
 	ffb, _ := strconv.ParseFloat(b, 64)
 	expect(t, ffb, 500.12)
+	expect(t, accts[0].AsFloat("/native_balance/amount"), 500.12)
 }
 
 func TestClientAccount(t *testing.T) {
@@ -57,12 +58,12 @@ func TestClientAccount(t *testing.T) {
 	expect(t, err, nil)
 	b := acct.props.AsNode("/balance/amount").AsStr()
 	expect(t, b, "50.00000000")
+	expect(t, acct.AsFloat("/balance/amount"), 50.00000000)
 }
 
 func TestCreateAccount(t *testing.T) {
 
 	var json = `{"account": {"name": "Savings Wallet"}}`
-	//args := dynjson.NewFromBytes([]byte(json))
 	acct, err := mclient.CreateAccount(json)
 	expect(t, err, nil)
 	n := acct.props.AsNode("/name").AsStr()
@@ -81,6 +82,7 @@ func TestCurrentUser(t *testing.T) {
 	user, err := mclient.CurrentUser()
 	expect(t, err, nil)
 	expect(t, user.props.AsNode("/email").AsStr(), "user1@example.com")
+	expect(t, user.AsStr("/email"), "user1@example.com")
 }
 
 func TestBuyPrice(t *testing.T) {
