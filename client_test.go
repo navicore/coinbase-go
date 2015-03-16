@@ -17,7 +17,8 @@ func TestClientAccounts(t *testing.T) {
 	b = accts[0].props.AsNode("/native_balance/amount").AsStr()
 	ffb, _ := strconv.ParseFloat(b, 64)
 	expect(t, ffb, 500.12)
-	expect(t, accts[0].AsFloat("/native_balance/amount"), 500.12)
+	f, _ := accts[0].Float("/native_balance/amount")
+	expect(t, f, 500.12)
 }
 
 func TestClientAccount(t *testing.T) {
@@ -25,7 +26,8 @@ func TestClientAccount(t *testing.T) {
 	expect(t, err, nil)
 	b := acct.props.AsNode("/balance/amount").AsStr()
 	expect(t, b, "50.00000000")
-	expect(t, acct.AsFloat("/balance/amount"), 50.00000000)
+	f, _ := acct.Float("/balance/amount")
+	expect(t, f, 50.00000000)
 }
 
 func TestCreateAccount(t *testing.T) {
@@ -33,7 +35,7 @@ func TestCreateAccount(t *testing.T) {
 	var json = `{"account": {"name": "Savings Wallet"}}`
 	acct, err := mc.CreateAccount(json)
 	expect(t, err, nil)
-	n := acct.AsStr("/name")
+	n, _ := acct.Str("/name")
 	expect(t, n, "Savings Wallet")
 }
 
@@ -41,7 +43,7 @@ func TestContacts(t *testing.T) {
 	contacts, err := mc.Contacts(1, 25, "")
 	expect(t, err, nil)
 	expect(t, len(contacts), 2)
-	email := contacts[0].AsStr("/email")
+	email, _ := contacts[0].Str("/email")
 	expect(t, email, "user1@example.com")
 }
 
@@ -49,7 +51,8 @@ func TestCurrentUser(t *testing.T) {
 	user, err := mc.CurrentUser()
 	expect(t, err, nil)
 	expect(t, user.props.AsNode("/email").AsStr(), "user1@example.com")
-	expect(t, user.AsStr("/email"), "user1@example.com")
+	email, _ := user.Str("/email")
+	expect(t, email, "user1@example.com")
 }
 
 func TestBuyPrice(t *testing.T) {
@@ -61,7 +64,8 @@ func TestBuyPrice(t *testing.T) {
 func TestSellPrice(t *testing.T) {
 	price, err := mc.SellPrice(1)
 	expect(t, err, nil)
-	expect(t, price.AsNode("/total/amount").AsStr(), "9.65")
+	p, _ := price.AsNode("/total/amount").Str()
+	expect(t, p, "9.65")
 }
 
 func TestSpotPrice(t *testing.T) {
@@ -86,13 +90,14 @@ func TestPayMethods(t *testing.T) {
 	pms, err := mc.PayMethods()
 	expect(t, err, nil)
 	expect(t, len(pms), 2)
-	name := pms[0].AsStr("/name")
+	name, e := pms[0].Str("/name")
+	expect(t, e, nil)
 	expect(t, name, "US Bank ****4567")
 }
 
 func TestPayMethod(t *testing.T) {
 	pm, err := mc.PayMethod("530eb5b217cb34e07a000011")
 	expect(t, err, nil)
-	name := pm.AsStr("/name")
+	name, _ := pm.Str("/name")
 	expect(t, name, "US Bank ****4567")
 }

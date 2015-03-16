@@ -28,18 +28,21 @@ func (this Account) Delete() (bool, error) {
 }
 
 func (this Account) SetPrimary() (bool, error) {
-	path := fmt.Sprintf("/accounts/%v/primary", this.AsStr("/id"))
+	id, err := this.Str("/id")
+	if err != nil {
+		return false, err
+	}
+	path := fmt.Sprintf("/accounts/%v/primary", id)
 	dyn, err := this.client.PostDynNode(path, "")
 	if err != nil {
 		return false, err
 	}
-	//ejs TODO make safe path checks, NO PANICS!
-	//ejs TODO make safe path checks, NO PANICS!
-	//ejs TODO make safe path checks, NO PANICS!
-	//ejs TODO make safe path checks, NO PANICS!
 	props, err := dyn.Node("/success")
 	if err != nil {
-		return false, nil
+		return false, err
+	}
+	if props.IsNull() {
+		return false, fmt.Errorf("node not found")
 	}
 	return props.AsBool(), nil
 }
@@ -49,7 +52,11 @@ func (this Account) Modify(args dynjson.DynNode) (bool, error) {
 }
 
 func (this Account) Balance() (dynjson.DynNode, error) {
-	path := fmt.Sprintf("/accounts/%v/balance", this.AsStr("/id"))
+	id, err := this.Str("/id")
+	if err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/accounts/%v/balance", id)
 	return this.client.GetDynNode(path, nil)
 }
 

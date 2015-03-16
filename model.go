@@ -2,6 +2,7 @@ package coinbase
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	"github.com/chrhlnd/dynjson"
@@ -28,48 +29,54 @@ func Id(id string) dynjson.DynNode {
 	return props
 }
 
-func (this Model) AsFloat(path string) float64 {
-	//ejs TODO make safe path checks, NO PANICS!
-	//ejs TODO use error return
+func (this Model) node(path string) (dynjson.DynNode, error) {
 	if this.props == nil {
-		return -1
+		return nil, fmt.Errorf("props are not set")
 	}
-	bn, err := this.props.Node(path)
+	if this.props.IsNull() {
+		return nil, fmt.Errorf("props are nil")
+	}
+	n, e := this.props.Node(path)
+	if e != nil {
+		return nil, e
+	}
+	if n.IsNull() {
+		return nil, fmt.Errorf("field is nil")
+	}
+	return n, nil
+}
+
+func (this Model) Float(path string) (float64, error) {
+	n, err := this.node(path)
 	if err != nil {
-		return -1
+		return -1, err
 	}
-	b := bn.AsStr()
+	b, e := n.Str()
+	if e != nil {
+		return -1, e
+	}
 	fb, _ := strconv.ParseFloat(b, 64)
-	return fb
+	return fb, nil
 }
 
-func (this Model) AsInt(path string) int {
-	//ejs TODO make safe path checks, NO PANICS!
-	//ejs TODO use error return
-	if this.props == nil {
-		return -1
-	}
-	bn, err := this.props.Node(path)
+func (this Model) Int(path string) (int, error) {
+	n, err := this.node(path)
 	if err != nil {
-		return -1
+		return -1, err
 	}
-	return int(bn.AsI64())
+	return int(n.AsI64()), nil
 }
 
-func (this Model) AsStr(path string) string {
-	//ejs TODO make safe path checks, NO PANICS!
-	//ejs TODO use error return
-	if this.props == nil {
-		return ""
-	}
-	bn, err := this.props.Node(path)
+func (this Model) Str(path string) (string, error) {
+	n, err := this.node(path)
 	if err != nil {
-		return ""
+		return "", err
 	}
-	return bn.AsStr()
+	return n.Str()
 }
 
 func (this Model) String() string {
+	//TODO: baked??
 	if this.props == nil {
 		return "nil"
 	}
