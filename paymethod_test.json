@@ -1,0 +1,8 @@
+{
+    "payment_method": {
+        "can_buy": true,
+        "can_sell": true,
+        "id": "530eb5b217cb34e07a000011",
+        "name": "US Bank ****4567"
+    }
+}

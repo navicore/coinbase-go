@@ -148,11 +148,11 @@ func (this Client) Accounts() ([]Account, error) {
 
 	accts := make([]Account, len, len)
 	for i := 0; i < len; i++ {
-		acctdyn, err := acctsdyn.Node(fmt.Sprintf("/%v", i))
+		props, err := acctsdyn.Node(fmt.Sprintf("/%v", i))
 		if err != nil {
 			return nil, err
 		}
-		accts[i] = NewAccountFromProps(acctdyn, this)
+		accts[i] = NewAccountFromProps(props, this)
 	}
 	return accts, nil
 }
@@ -163,11 +163,11 @@ func (this Client) Account(id string) (Account, error) {
 	if err != nil {
 		return Account{}, err
 	}
-	acctdyn, err := root.Node("/account")
+	props, err := root.Node("/account")
 	if err != nil {
 		return Account{}, err
 	}
-	return NewAccountFromProps(acctdyn, this), nil
+	return NewAccountFromProps(props, this), nil
 }
 
 func (this Client) CreateAccount(args string) (Account, error) {
@@ -175,11 +175,11 @@ func (this Client) CreateAccount(args string) (Account, error) {
 	if err != nil {
 		return Account{}, err
 	}
-	acctdyn, err := root.Node("/account")
+	props, err := root.Node("/account")
 	if err != nil {
 		return Account{}, err
 	}
-	return NewAccountFromProps(acctdyn, this), nil
+	return NewAccountFromProps(props, this), nil
 }
 
 func (this Client) Contacts(page int, limit int, query string) ([]Contact, error) {
@@ -237,10 +237,11 @@ func (this Client) SpotPrice(currency string) (dynjson.DynNode, error) {
 }
 
 func (this Client) Currencies() (dynjson.DynNode, error) {
-	return nil, nil
+	return this.GetDynNode("/currencies", nil)
 }
 
 func (this Client) Rates() (dynjson.DynNode, error) {
+	return this.GetDynNode("/exchange_rates", nil)
 	return nil, nil
 }
 
@@ -249,9 +250,37 @@ func (this Client) CreateUser(args dynjson.DynNode) (User, error) {
 }
 
 func (this Client) PayMethods() ([]PayMethod, error) {
-	return nil, nil
+	root, err := this.GetDynNode("/payment_methods", nil)
+	if err != nil {
+		return nil, err
+	}
+	dyn, err := root.Node("/payment_methods")
+	if err != nil {
+		return nil, err
+	}
+	len := dyn.Len()
+
+	pms := make([]PayMethod, len, len)
+	for i := 0; i < len; i++ {
+		node, err := dyn.Node(fmt.Sprintf("/%v", i))
+		if err != nil {
+			return nil, err
+		}
+		props, err := node.Node("/payment_method")
+		pms[i] = PayMethod{Model{props: props, client: this}}
+	}
+	return pms, nil
 }
 
 func (this Client) PayMethod(id string) (PayMethod, error) {
-	return PayMethod{}, nil
+	path := fmt.Sprintf("/payment_methods/%v", id)
+	root, err := this.GetDynNode(path, nil)
+	if err != nil {
+		return PayMethod{}, err
+	}
+	props, err := root.Node("/payment_method")
+	if err != nil {
+		return PayMethod{}, err
+	}
+	return PayMethod{Model{props: props, client: this}}, nil
 }

@@ -1,0 +1,22 @@
+{
+    "default_buy": "530eb5b217cb34e07a000011",
+    "default_sell": "530eb5b217cb34e07a000011",
+    "payment_methods": [
+        {
+            "payment_method": {
+                "can_buy": true,
+                "can_sell": true,
+                "id": "530eb5b217cb34e07a000011",
+                "name": "US Bank ****4567"
+            }
+        },
+        {
+            "payment_method": {
+                "can_buy": false,
+                "can_sell": false,
+                "id": "530eb7e817cb34e07a00001a",
+                "name": "VISA card 1111"
+            }
+        }
+    ]
+}
