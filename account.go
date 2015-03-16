@@ -1,6 +1,10 @@
 package coinbase
 
-import "github.com/chrhlnd/dynjson"
+import (
+	"fmt"
+
+	"github.com/chrhlnd/dynjson"
+)
 
 type Account struct {
 	Model
@@ -31,8 +35,9 @@ func (obj Account) Modify(args dynjson.DynNode) (bool, error) {
 	return false, nil
 }
 
-func (obj Account) Balance() (dynjson.DynNode, error) {
-	return nil, nil
+func (this Account) Balance() (dynjson.DynNode, error) {
+	path := fmt.Sprintf("/accounts/%v/balance", this.AsStr("/id"))
+	return this.client.GetDynNode(path, nil)
 }
 
 func (obj Account) Address() (dynjson.DynNode, error) {
