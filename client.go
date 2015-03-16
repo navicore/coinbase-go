@@ -183,8 +183,11 @@ func (this Client) CreateAccount(args string) (Account, error) {
 }
 
 func (this Client) Contacts(page int, limit int, query string) ([]Contact, error) {
-	//TODO: page limit query impl
-	root, err := this.GetDynNode("/contacts", nil)
+	path := fmt.Sprintf("/contacts?page=%v&limit=%v", page, limit)
+	if query != "" {
+		path = path + "&query=" + query
+	}
+	root, err := this.GetDynNode(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -218,12 +221,14 @@ func (this Client) CurrentUser() (User, error) {
 	return User{Model{props: props, client: this}}, nil
 }
 
-func (this Client) BuyPrice() (dynjson.DynNode, error) {
-	return nil, nil
+func (this Client) BuyPrice(qty int) (dynjson.DynNode, error) {
+	path := fmt.Sprintf("/prices/buy?qty=/%v", qty)
+	return this.GetDynNode(path, nil)
 }
 
-func (this Client) SellPrice() (dynjson.DynNode, error) {
-	return nil, nil
+func (this Client) SellPrice(qty int) (dynjson.DynNode, error) {
+	path := fmt.Sprintf("/prices/sell?qty=/%v", qty)
+	return this.GetDynNode(path, nil)
 }
 
 func (this Client) SpotPrice() (dynjson.DynNode, error) {
@@ -249,16 +254,3 @@ func (this Client) PayMethods() ([]PayMethod, error) {
 func (this Client) PayMethod(id string) (PayMethod, error) {
 	return PayMethod{}, nil
 }
-
-/*
-ClientBase.prototype._setAccessToken = function (url) {
-ClientBase.prototype._generateSignature = function (url, bodyStr) {
-ClientBase.prototype._generateReqOptions = function (url, body, method, headers) {
-ClientBase.prototype._getHttp = function (path, args, callback, headers) {
-ClientBase.prototype._postHttp = function (path, body, callback, headers) {
-ClientBase.prototype._putHttp = function (path, body, callback, headers) {
-ClientBase.prototype._deleteHttp = function (path, callback, headers) {
-ClientBase.prototype._getAllHttp = function(opts, callback, headers) {
-ClientBase.prototype._getOneHttp = function(args, callback, headers) {
-ClientBase.prototype._postOneHttp = function (opts, callback, headers) {
-*/

@@ -16,14 +16,14 @@ func expect(t *testing.T, a interface{}, b interface{}) {
 	}
 }
 
-type hdlr struct {
+type mock struct {
 	Path     string
 	Method   string
 	Filename string
 	Test     func(*http.Request) (int, string)
 }
 
-var handlers = make([]hdlr, 0, 50)
+var handlers = make([]mock, 0, 50)
 
 func route(r *http.Request) (int, string) {
 	method := r.Method

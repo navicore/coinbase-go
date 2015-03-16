@@ -1,0 +1,28 @@
+{
+    "btc": {
+        "amount": "1.00000000",
+        "currency": "BTC"
+    },
+    "fees": [
+        {
+            "coinbase": {
+                "amount": "0.10",
+                "currency": "USD"
+            }
+        },
+        {
+            "bank": {
+                "amount": "0.15",
+                "currency": "USD"
+            }
+        }
+    ],
+    "subtotal": {
+        "amount": "10.10",
+        "currency": "USD"
+    },
+    "total": {
+        "amount": "10.35",
+        "currency": "USD"
+    }
+}

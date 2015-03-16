@@ -6,22 +6,39 @@ import (
 	"testing"
 )
 
-func testok(*http.Request) (int, string) {
+func testok(r *http.Request) (int, string) {
 	return 200, "OK"
 }
 
-var mclient = mockClient()
+func testPageLimit(r *http.Request) (int, string) {
+	page := r.FormValue("page")
+	if page != "1" {
+		return 400, "what?"
+	}
+	limit := r.FormValue("limit")
+	if limit != "25" {
+		return 400, "what?"
+	}
+	return 200, "OK"
+}
 
+//register mock http handlers
+//path, method, response file name, function to test request
 func init() {
 	handlers =
-		[]hdlr{
-			hdlr{"/accounts", "GET", "accounts_test.json", testok},
-			hdlr{"/accounts/123", "GET", "account_test.json", testok},
-			hdlr{"/accounts", "POST", "create_account_test.json", testok},
-			hdlr{"/contacts", "GET", "contacts_test.json", testok},
-			hdlr{"/users/self", "POST", "current_user_test.json", testok},
+		[]mock{
+			mock{"/accounts", "GET", "accounts_test.json", testok},
+			mock{"/accounts/123", "GET", "account_test.json", testok},
+			mock{"/accounts", "POST", "create_account_test.json", testok},
+			mock{"/contacts", "GET", "contacts_test.json", testPageLimit},
+			mock{"/users/self", "POST", "current_user_test.json", testok},
+			mock{"/prices/buy", "GET", "buy_price_test.json", testok},
+			mock{"/prices/sell", "GET", "sell_price_test.json", testok},
+			mock{"/prices/spot_rate?currency=USD", "GET", "spot_price_test.json", testok},
 		}
 }
+
+var mclient = mockClient()
 
 func TestClientAccounts(t *testing.T) {
 	accts, err := mclient.Accounts()
@@ -53,7 +70,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestContacts(t *testing.T) {
-	contacts, err := mclient.Contacts(1, 10, "")
+	contacts, err := mclient.Contacts(1, 25, "")
 	expect(t, err, nil)
 	expect(t, len(contacts), 2)
 	email := contacts[0].props.AsNode("/email").AsStr()
@@ -67,11 +84,15 @@ func TestCurrentUser(t *testing.T) {
 }
 
 func TestBuyPrice(t *testing.T) {
-	//TODO
+	price, err := mclient.BuyPrice(1)
+	expect(t, err, nil)
+	expect(t, price.AsNode("/total/amount").AsStr(), "10.35")
 }
 
 func TestSellPrice(t *testing.T) {
-	//TODO
+	price, err := mclient.SellPrice(1)
+	expect(t, err, nil)
+	expect(t, price.AsNode("/total/amount").AsStr(), "9.65")
 }
 
 func TestSpotPrice(t *testing.T) {
