@@ -96,7 +96,6 @@ func TestCreateAddress(t *testing.T) {
 	l, e := label.Str()
 	expect(t, e, nil)
 	expect(t, l, "Dalmation donations")
-
 }
 
 func TestGetTxns(t *testing.T) {
