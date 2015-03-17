@@ -99,15 +99,30 @@ func TestCreateAddress(t *testing.T) {
 }
 
 func TestGetTxns(t *testing.T) {
+	txns, err := MockAcct.Transactions(1, 25)
+	expect(t, err, nil)
+	s, e := txns[0].Str("/status")
+	expect(t, e, nil)
+	expect(t, s, "pending")
 }
 
 func TestGetTxn(t *testing.T) {
+	//ejs TODO
 }
 
 func TestGetXfers(t *testing.T) {
+	xfers, err := MockAcct.Transfers(1, 25)
+	expect(t, err, nil)
+	s, e := xfers[0].Str("/status")
+	expect(t, e, nil)
+	expect(t, s, "Pending")
+	tp, e := xfers[0].Str("/type")
+	expect(t, e, nil)
+	expect(t, tp, "Buy")
 }
 
 func TestGetXfer(t *testing.T) {
+	//ejs TODO
 }
 
 func TestTransferMoney(t *testing.T) {

@@ -129,7 +129,32 @@ func (this Account) CreateAddress(args string) (dynjson.DynNode, error) {
 }
 
 func (this Account) Transactions(page, limit int) ([]Transaction, error) {
-	return nil, nil
+	var root, props, node, dyn dynjson.DynNode
+	var id string
+	var err error
+	if id, err = this.Str("/id"); err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/transactions?page=%v&limit=%v&account_id=%v", page, limit, id)
+	if root, err = this.client.GetDynNode(path, nil); err != nil {
+		return nil, err
+	}
+	if dyn, err = root.Node("/transactions"); err != nil {
+		return nil, err
+	}
+	len := dyn.Len()
+
+	txns := make([]Transaction, len, len)
+	for i := 0; i < len; i++ {
+		if node, err = dyn.Node(fmt.Sprintf("/%v", i)); err != nil {
+			return nil, err
+		}
+		if props, err = node.Node("/transaction"); err != nil {
+			return nil, err
+		}
+		txns[i] = Transaction{Model{props: props, client: this.client}}
+	}
+	return txns, nil
 }
 
 func (this Account) Transaction(id string) (Transaction, error) {
@@ -137,7 +162,32 @@ func (this Account) Transaction(id string) (Transaction, error) {
 }
 
 func (this Account) Transfers(page, limit int) ([]Transfer, error) {
-	return nil, nil
+	var root, props, node, dyn dynjson.DynNode
+	var id string
+	var err error
+	if id, err = this.Str("/id"); err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/transfers?page=%v&limit=%v&account_id=%v", page, limit, id)
+	if root, err = this.client.GetDynNode(path, nil); err != nil {
+		return nil, err
+	}
+	if dyn, err = root.Node("/transfers"); err != nil {
+		return nil, err
+	}
+	len := dyn.Len()
+
+	xfers := make([]Transfer, len, len)
+	for i := 0; i < len; i++ {
+		if node, err = dyn.Node(fmt.Sprintf("/%v", i)); err != nil {
+			return nil, err
+		}
+		if props, err = node.Node("/transfer"); err != nil {
+			return nil, err
+		}
+		xfers[i] = Transfer{Model{props: props, client: this.client}}
+	}
+	return xfers, nil
 }
 
 func (this Account) Transfer(id string) (Transfer, error) {
