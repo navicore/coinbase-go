@@ -2,7 +2,6 @@ package coinbase
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/chrhlnd/dynjson"
@@ -31,17 +30,17 @@ func Id(id string) dynjson.DynNode {
 
 func (this Model) node(path string) (dynjson.DynNode, error) {
 	if this.props == nil {
-		return nil, fmt.Errorf("props are not set")
+		return nil, CbError{"props are not set"}
 	}
 	if this.props.IsNull() {
-		return nil, fmt.Errorf("props are nil")
+		return nil, CbError{"props are nil"}
 	}
 	n, e := this.props.Node(path)
 	if e != nil {
 		return nil, e
 	}
 	if n.IsNull() {
-		return nil, fmt.Errorf("field is nil")
+		return nil, CbError{"field is nil"}
 	}
 	return n, nil
 }

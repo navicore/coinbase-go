@@ -143,7 +143,7 @@ func (this *Client) request(req *http.Request) ([]byte, error) {
 	}
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Invalid HTTP response code: %d", resp.StatusCode)
+		return nil, CbHttpError{resp.StatusCode}
 	}
 
 	return body, nil

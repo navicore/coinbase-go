@@ -39,7 +39,7 @@ func (this Account) Delete() (bool, error) {
 		return false, err
 	}
 	if props.IsNull() {
-		return false, fmt.Errorf("node not found")
+		return false, CbNotFoundError{}
 	}
 	return props.AsBool(), nil
 }
@@ -60,7 +60,7 @@ func (this Account) SetPrimary() (bool, error) {
 		return false, err
 	}
 	if props.IsNull() {
-		return false, fmt.Errorf("node not found")
+		return false, CbNotFoundError{}
 	}
 	return props.AsBool(), nil
 }
@@ -77,7 +77,7 @@ func (this Account) Modify(args string) (Account, error) {
 		return Account{}, err
 	}
 	if root.IsNull() {
-		return Account{}, fmt.Errorf("node not found")
+		return Account{}, CbNotFoundError{}
 	}
 	if props, err = root.Node("/account"); err != nil {
 		return Account{}, err
