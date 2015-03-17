@@ -41,7 +41,6 @@ func (this Account) Delete() (bool, error) {
 		return false, fmt.Errorf("node not found")
 	}
 	return props.AsBool(), nil
-
 }
 
 func (this Account) SetPrimary() (bool, error) {
@@ -64,8 +63,24 @@ func (this Account) SetPrimary() (bool, error) {
 	return props.AsBool(), nil
 }
 
-func (this Account) Modify(args dynjson.DynNode) (bool, error) {
-	return false, nil
+func (this Account) Modify(args string) (Account, error) {
+	id, err := this.Str("/id")
+	if err != nil {
+		return Account{}, err
+	}
+	path := fmt.Sprintf("/accounts/%v", id)
+	root, err := this.client.PutDynNode(path, args)
+	if err != nil {
+		return Account{}, err
+	}
+	if root.IsNull() {
+		return Account{}, fmt.Errorf("node not found")
+	}
+	props, err := root.Node("/account")
+	if err != nil {
+		return Account{}, err
+	}
+	return NewAccountFromProps(props, this.client), nil
 }
 
 func (this Account) Balance() (dynjson.DynNode, error) {
@@ -77,16 +92,42 @@ func (this Account) Balance() (dynjson.DynNode, error) {
 	return this.client.GetDynNode(path, nil)
 }
 
-func (this Account) Address() (dynjson.DynNode, error) {
-	return nil, nil
+func (this Account) Addresses(page int, limit int, query string) (dynjson.DynNode, error) {
+	id, err := this.Str("/id")
+	if err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/addresses?account_id=%v&page=%v&limit=%v", id, page, limit)
+	if query != "" {
+		path = path + "&query=" + query
+	}
+	root, err := this.client.GetDynNode(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	return root, nil
 }
 
-func (this Account) Addresses() (dynjson.DynNode, error) {
-	return nil, nil
+func (this Account) Address(address_id string) (dynjson.DynNode, error) {
+	id, err := this.Str("/id")
+	if err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/addresses/%v?account_id=%v", address_id, id)
+	root, err := this.client.GetDynNode(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	return root, nil
 }
 
-func (this Account) NewAddress(args dynjson.DynNode) (dynjson.DynNode, error) {
-	return nil, nil
+func (this Account) CreateAddress(args string) (dynjson.DynNode, error) {
+	id, err := this.Str("/id")
+	if err != nil {
+		return nil, err
+	}
+	path := fmt.Sprintf("/accounts/%v/address", id)
+	return this.client.PostDynNode(path, args)
 }
 
 func (this Account) Transactions(page, limit int) ([]Transaction, error) {

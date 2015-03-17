@@ -54,15 +54,49 @@ func TestDeleteAccount(t *testing.T) {
 }
 
 func TestModifyAccount(t *testing.T) {
+	acct, err := MockAcct.Modify(`{"account": {"name": "Satoshi Wallet"}}`)
+	expect(t, err, nil)
+	name, err := acct.Str("/name")
+	expect(t, err, nil)
+	expect(t, name, "Satoshi Wallet")
 }
 
 func TestGetAddresses(t *testing.T) {
+	data, err := MockAcct.Addresses(1, 25, "")
+	expect(t, err, nil)
+	label, err := data.Node("/addresses/0/address/label")
+	expect(t, label.IsNull(), false)
+	l, e := label.Str()
+	expect(t, e, nil)
+	expect(t, l, "My Label")
 }
 
 func TestGetAddress(t *testing.T) {
+	data, err := MockAcct.Address("503c46a4f8182b10650000ad")
+	expect(t, err, nil)
+	label, err := data.Node("/address/label")
+	expect(t, label.IsNull(), false)
+	l, e := label.Str()
+	expect(t, e, nil)
+	expect(t, l, "My Label")
 }
 
 func TestCreateAddress(t *testing.T) {
+	data, err := MockAcct.CreateAddress(`
+	{
+		"address": {
+				"callback_url": "http://www.example.com/callback",
+				"label": "Dalmation donations"
+		}
+	}
+	`)
+	expect(t, err, nil)
+	label, err := data.Node("/label")
+	expect(t, label.IsNull(), false)
+	l, e := label.Str()
+	expect(t, e, nil)
+	expect(t, l, "Dalmation donations")
+
 }
 
 func TestGetTxns(t *testing.T) {

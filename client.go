@@ -93,6 +93,23 @@ func (this *Client) Post(api_method string, bodystr string) ([]byte, error) {
 	return this.request(req)
 }
 
+func (this *Client) Put(api_method string, bodystr string) ([]byte, error) {
+	api_url := this.Uri + api_method
+
+	var req *http.Request
+	var err error
+
+	req, err = http.NewRequest("PUT", api_url, bytes.NewReader([]byte(bodystr)))
+	if err != nil {
+		return nil, err
+	}
+
+	this.headers(api_url, req)
+	this.authHeaders(api_url, bodystr, req)
+
+	return this.request(req)
+}
+
 func (this *Client) Get(method string, params url.Values) ([]byte, error) {
 
 	api_url := this.Uri + method
@@ -134,6 +151,16 @@ func (this *Client) request(req *http.Request) ([]byte, error) {
 
 func (this Client) DelDynNode(api_method string, params string) (dynjson.DynNode, error) {
 	buffer, err := this.Delete(api_method)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return dynjson.NewFromBytes(buffer), nil
+}
+
+func (this Client) PutDynNode(api_method string, params string) (dynjson.DynNode, error) {
+	buffer, err := this.Put(api_method, params)
 
 	if err != nil {
 		return nil, err
