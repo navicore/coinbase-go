@@ -11,22 +11,22 @@ import (
 )
 
 var handlers = []mock{
-	mock{"/accounts", "GET", "accounts_test.json", testok},
-	mock{"/accounts/123", "GET", "account_test.json", testok},
-	mock{"/accounts/536a541fa9393bb3c7000023", "GET", "account_test.json", testok},
-	mock{"/accounts/536a541fa9393bb3c7000023/balance", "GET", "account_balance_test.json", testok},
-	mock{"/accounts", "POST", "create_account_test.json", testok},
-	mock{"/contacts", "GET", "contacts_test.json", testPageLimit},
-	mock{"/users/self", "POST", "current_user_test.json", testok},
-	mock{"/prices/buy", "GET", "buy_price_test.json", testok},
-	mock{"/prices/sell", "GET", "sell_price_test.json", testok},
-	mock{"/prices/spot_rate", "GET", "spot_price_test.json", testok},
-	mock{"/currencies", "GET", "currencies_test.json", testok},
-	mock{"/exchange_rates", "GET", "rates_test.json", testok},
-	mock{"/payment_methods", "GET", "paymethods_test.json", testok},
-	mock{"/payment_methods/530eb5b217cb34e07a000011", "GET", "paymethod_test.json", testok},
-	mock{"/accounts/536a541fa9393bb3c7000023/primary", "POST", "success_test.json", testok},
-	mock{"/accounts/536a541fa9393bb3c7000023", "DELETE", "success_test.json", testok},
+	mock{"/accounts", "GET", "testjson/accounts_test.json", testok},
+	mock{"/accounts/123", "GET", "testjson/account_test.json", testok},
+	mock{"/accounts/536a541fa9393bb3c7000023", "GET", "testjson/account_test.json", testok},
+	mock{"/accounts/536a541fa9393bb3c7000023/balance", "GET", "testjson/account_balance_test.json", testok},
+	mock{"/accounts", "POST", "testjson/create_account_test.json", testok},
+	mock{"/contacts", "GET", "testjson/contacts_test.json", testPageLimit},
+	mock{"/users/self", "POST", "testjson/current_user_test.json", testok},
+	mock{"/prices/buy", "GET", "testjson/buy_price_test.json", testok},
+	mock{"/prices/sell", "GET", "testjson/sell_price_test.json", testok},
+	mock{"/prices/spot_rate", "GET", "testjson/spot_price_test.json", testok},
+	mock{"/currencies", "GET", "testjson/currencies_test.json", testok},
+	mock{"/exchange_rates", "GET", "testjson/rates_test.json", testok},
+	mock{"/payment_methods", "GET", "testjson/paymethods_test.json", testok},
+	mock{"/payment_methods/530eb5b217cb34e07a000011", "GET", "testjson/paymethod_test.json", testok},
+	mock{"/accounts/536a541fa9393bb3c7000023/primary", "POST", "testjson/success_test.json", testok},
+	mock{"/accounts/536a541fa9393bb3c7000023", "DELETE", "testjson/success_test.json", testok},
 }
 var MockClient = mockClient()
 var MockAcct, _ = MockClient.Account("536a541fa9393bb3c7000023")

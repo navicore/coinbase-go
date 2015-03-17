@@ -1,0 +1,18 @@
+{
+    "account": {
+        "active": true,
+        "balance": {
+            "amount": "100.00",
+            "currency": "GBP"
+        },
+        "created_at": "2014-05-15T14:10:22-07:00",
+        "id": "53752d3e46cd93c93c00000c",
+        "name": "Satoshi Wallet",
+        "native_balance": {
+            "amount": "168.14",
+            "currency": "USD"
+        },
+        "primary": false
+    },
+    "success": true
+}

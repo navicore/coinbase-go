@@ -71,6 +71,12 @@ func TestGetTxns(t *testing.T) {
 func TestGetTxn(t *testing.T) {
 }
 
+func TestGetXfers(t *testing.T) {
+}
+
+func TestGetXfer(t *testing.T) {
+}
+
 func TestTransferMoney(t *testing.T) {
 }
 
@@ -78,12 +84,6 @@ func TestSendMoney(t *testing.T) {
 }
 
 func TestRequestMoney(t *testing.T) {
-}
-
-func TestGetXfers(t *testing.T) {
-}
-
-func TestGetXfer(t *testing.T) {
 }
 
 func TestGetButton(t *testing.T) {
