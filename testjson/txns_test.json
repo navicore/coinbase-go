@@ -1,0 +1,61 @@
+{
+    "balance": {
+        "amount": "50.00000000",
+        "currency": "BTC"
+    },
+    "current_page": 1,
+    "current_user": {
+        "email": "user2@example.com",
+        "id": "5011f33df8182b142400000e",
+        "name": "User Two"
+    },
+    "native_balance": {
+        "amount": "500.00",
+        "currency": "USD"
+    },
+    "num_pages": 1,
+    "total_count": 2,
+    "transactions": [
+        {
+            "transaction": {
+                "amount": {
+                    "amount": "-1.10000000",
+                    "currency": "BTC"
+                },
+                "created_at": "2012-08-01T02:34:43-07:00",
+                "id": "5018f833f8182b129c00002f",
+                "recipient": {
+                    "email": "user1@example.com",
+                    "id": "5011f33df8182b142400000a",
+                    "name": "User One"
+                },
+                "request": true,
+                "sender": {
+                    "email": "user2@example.com",
+                    "id": "5011f33df8182b142400000e",
+                    "name": "User Two"
+                },
+                "status": "pending"
+            }
+        },
+        {
+            "transaction": {
+                "amount": {
+                    "amount": "-1.00000000",
+                    "currency": "BTC"
+                },
+                "created_at": "2012-08-01T02:36:43-07:00",
+                "hsh": "9d6a7d1112c3db9de5315b421a5153d71413f5f752aff75bf504b77df4e646a3",
+                "id": "5018f833f8182b129c00002e",
+                "recipient_address": "37muSN5ZrukVTvyVh3mT5Zc5ew9L9CBare",
+                "request": false,
+                "sender": {
+                    "email": "user2@example.com",
+                    "id": "5011f33df8182b142400000e",
+                    "name": "User Two"
+                },
+                "status": "complete"
+            }
+        }
+    ]
+}
