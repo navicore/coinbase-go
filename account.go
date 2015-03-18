@@ -158,7 +158,7 @@ func (this Account) Transactions(page, limit int) ([]Transaction, error) {
 }
 
 func (this Account) Transaction(id string) (Transaction, error) {
-	return Transaction{}, nil
+	return Transaction{}, CbNotImplementedError{}
 }
 
 func (this Account) Transfers(page, limit int) ([]Transfer, error) {
@@ -191,45 +191,45 @@ func (this Account) Transfers(page, limit int) ([]Transfer, error) {
 }
 
 func (this Account) Transfer(id string) (Transfer, error) {
-	return Transfer{}, nil
+	return Transfer{}, CbNotImplementedError{}
 }
 
 func (this Account) TransferMoney(args dynjson.DynNode) (Transaction, error) {
-	return Transaction{}, nil
+	return Transaction{}, CbNotImplementedError{}
 }
 
 func (this Account) SendMoney(args dynjson.DynNode, twofauth string) (Transaction, error) {
-	return Transaction{}, nil
+	return Transaction{}, CbNotImplementedError{}
 }
 
 func (this Account) RequestMoney(args dynjson.DynNode) (Transaction, error) {
-	return Transaction{}, nil
+	return Transaction{}, CbNotImplementedError{}
 }
 
 func (this Account) Button(code string) (Button, error) {
-	return Button{}, nil
+	return Button{}, CbNotImplementedError{}
 }
 
 func (this Account) NewButton(args dynjson.DynNode) (Button, error) {
-	return Button{}, nil
+	return Button{}, CbNotImplementedError{}
 }
 
 func (this Account) Orders(page, limit int) ([]Order, error) {
-	return nil, nil
+	return nil, CbNotImplementedError{}
 }
 
 func (this Account) Order(id string) (Order, error) {
-	return Order{}, nil
+	return Order{}, CbNotImplementedError{}
 }
 
 func (this Account) NewOrder(args dynjson.DynNode) (Order, error) {
-	return Order{}, nil
+	return Order{}, CbNotImplementedError{}
 }
 
 func (this Account) Buy(args dynjson.DynNode) (Transfer, error) {
-	return Transfer{}, nil
+	return Transfer{}, CbNotImplementedError{}
 }
 
 func (this Account) Sell(args dynjson.DynNode) (Transfer, error) {
-	return Transfer{}, nil
+	return Transfer{}, CbNotImplementedError{}
 }

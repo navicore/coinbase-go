@@ -8,6 +8,13 @@ type Base struct {
 type CbNotFoundError struct {
 }
 
+type CbNotImplementedError struct {
+}
+
+func (e CbNotImplementedError) Error() string {
+	return fmt.Sprintf("coinbase-go error: not implemented")
+}
+
 func (e CbNotFoundError) Error() string {
 	return fmt.Sprintf("coinbase-go error: not found")
 }
